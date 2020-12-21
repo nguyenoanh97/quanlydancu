@@ -27,13 +27,13 @@ import okhttp3.OkHttpClient;
 public class ReactNativeFlipper {
   public static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManager) {
     if (FlipperUtils.shouldEnableFlipper(context)) {
-      final FlipperClient client = AndroidFlipperClient.getInstance(context);
+      final FlipperClient api = AndroidFlipperClient.getInstance(context);
 
-      client.addPlugin(new InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()));
-      client.addPlugin(new ReactFlipperPlugin());
-      client.addPlugin(new DatabasesFlipperPlugin(context));
-      client.addPlugin(new SharedPreferencesFlipperPlugin(context));
-      client.addPlugin(CrashReporterPlugin.getInstance());
+      api.addPlugin(new InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()));
+      api.addPlugin(new ReactFlipperPlugin());
+      api.addPlugin(new DatabasesFlipperPlugin(context));
+      api.addPlugin(new SharedPreferencesFlipperPlugin(context));
+      api.addPlugin(CrashReporterPlugin.getInstance());
 
       NetworkFlipperPlugin networkFlipperPlugin = new NetworkFlipperPlugin();
       NetworkingModule.setCustomClientBuilder(
@@ -43,8 +43,8 @@ public class ReactNativeFlipper {
               builder.addNetworkInterceptor(new FlipperOkhttpInterceptor(networkFlipperPlugin));
             }
           });
-      client.addPlugin(networkFlipperPlugin);
-      client.start();
+      api.addPlugin(networkFlipperPlugin);
+      api.start();
 
       // Fresco Plugin needs to ensure that ImagePipelineFactory is initialized
       // Hence we run if after all native modules have been initialized
@@ -59,13 +59,13 @@ public class ReactNativeFlipper {
                     new Runnable() {
                       @Override
                       public void run() {
-                        client.addPlugin(new FrescoFlipperPlugin());
+                        api.addPlugin(new FrescoFlipperPlugin());
                       }
                     });
               }
             });
       } else {
-        client.addPlugin(new FrescoFlipperPlugin());
+        api.addPlugin(new FrescoFlipperPlugin());
       }
     }
   }
