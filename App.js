@@ -4,13 +4,20 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Root} from 'native-base';
-import {HOME, LOGIN, PROFILE, STACK_TAB} from './src/core/utils/screen_names';
+import {
+  ADD_RESIDENT,
+  HOME,
+  LOGIN,
+  PROFILE,
+  STACK_TAB,
+} from './src/core/utils/screen_names';
 import Login from './src/screens/login/login';
 import Home from './src/screens/home/home';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {USER} from './src/core/utils/async_key';
 import TabBar from './src/components/TabBar';
 import Profile from './src/screens/profile/profile';
+import AddResident from './src/screens/add_resident/add_resident';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -50,8 +57,9 @@ function App() {
             <Stack.Navigator
               screenOptions={screenOptions}
               initialRouteName={initScreen}>
-              <Stack.Screen name={LOGIN} component={Login} />
               <Stack.Screen name={STACK_TAB} component={StackTab} />
+              <Stack.Screen name={LOGIN} component={Login} />
+              <Stack.Screen name={ADD_RESIDENT} component={AddResident} />
             </Stack.Navigator>
           </NavigationContainer>
         </Root>
