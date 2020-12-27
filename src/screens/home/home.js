@@ -11,10 +11,21 @@ import {
   Body,
   Title,
 } from 'native-base';
-import {ADD_RESIDENT} from '../../core/utils/screen_names';
+import {ADD_RESIDENT, SEARCH} from '../../core/utils/screen_names';
 
 export default function Home({navigation}) {
-  const onAdd = () => navigation.navigate(ADD_RESIDENT);
+  const onAdd = () => {
+    navigation.navigate(ADD_RESIDENT);
+  };
+
+  const onChange = () => {
+    console.log('here');
+    navigation.navigate(ADD_RESIDENT);
+  };
+
+  const onSearch = () => {
+    navigation.navigate(SEARCH);
+  };
 
   return (
     <Container>
@@ -31,7 +42,7 @@ export default function Home({navigation}) {
       <Content>
         <View style={{height: 30}} />
 
-        <Button block light>
+        <Button block light onPress={onSearch}>
           <Text>Tìm kiếm</Text>
         </Button>
         <View style={{height: 30}} />
@@ -41,7 +52,7 @@ export default function Home({navigation}) {
         </Button>
         <View style={{height: 30}} />
 
-        <Button block success>
+        <Button block success onPress={onChange}>
           <Text>Sửa cư dân</Text>
         </Button>
       </Content>
@@ -49,6 +60,4 @@ export default function Home({navigation}) {
   );
 }
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});

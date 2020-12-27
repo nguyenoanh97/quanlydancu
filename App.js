@@ -9,6 +9,7 @@ import {
   HOME,
   LOGIN,
   PROFILE,
+  SEARCH,
   STACK_TAB,
 } from './src/core/utils/screen_names';
 import Login from './src/screens/login/login';
@@ -18,6 +19,8 @@ import {USER} from './src/core/utils/async_key';
 import TabBar from './src/components/TabBar';
 import Profile from './src/screens/profile/profile';
 import AddResident from './src/screens/add_resident/add_resident';
+import {ModalWrapper} from './src/components/modal/modal';
+import Search from './src/screens/search/search';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -60,8 +63,10 @@ function App() {
               <Stack.Screen name={STACK_TAB} component={StackTab} />
               <Stack.Screen name={LOGIN} component={Login} />
               <Stack.Screen name={ADD_RESIDENT} component={AddResident} />
+              <Stack.Screen name={SEARCH} component={Search} />
             </Stack.Navigator>
           </NavigationContainer>
+          <ModalWrapper />
         </Root>
       ) : (
         <View />

@@ -8,6 +8,7 @@ export default function InputBase({
   name,
   onPress,
   keyboardType,
+  editable,
 }) {
   const onChangeText = (text) => {
     let obj = {};
@@ -25,7 +26,7 @@ export default function InputBase({
         onChangeText={onChangeText}
         value={value}
         keyboardType={keyboardType || 'default'}
-        editable={!onPress}
+        editable={!onPress && editable}
       />
     </Item>
   );

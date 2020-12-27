@@ -15,7 +15,7 @@ clientAdmin.interceptors.request.use(
 clientAdmin.interceptors.response.use(
   function (response) {
     try {
-      console.log('response', response);
+      console.log('response', response?.data);
       return response?.data;
     } catch (error) {
       throw error;
@@ -27,3 +27,9 @@ clientAdmin.interceptors.response.use(
 );
 
 export const getAdmin = async () => await clientAdmin.get('admin');
+
+export const createResident = async (data) =>
+  await clientAdmin.post('residential', data);
+
+export const searchByPeopleCode = async (field, string) =>
+  await clientAdmin.get(`/residential?${field}=${string}`);
