@@ -14,7 +14,8 @@ import {toast} from '../../core/utils/funtions';
 import {getAdmin} from '../../core/services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {USER} from '../../core/utils/async_key';
-import {HOME} from '../../core/utils/screen_names';
+import { HOME, STACK_TAB } from "../../core/utils/screen_names";
+import { width } from "../../core/utils/const_value";
 
 export default function Login({navigation}) {
   const [username, setUsername] = useState('Darrick.Wolff');
@@ -40,7 +41,7 @@ export default function Login({navigation}) {
     } else {
       toast('Đăng nhập thành công!', 'success');
       await AsyncStorage.setItem(USER, JSON.stringify(user));
-      navigation.navigate(HOME);
+      navigation.navigate(STACK_TAB);
       console.log('user', user);
     }
   };
@@ -85,7 +86,7 @@ export default function Login({navigation}) {
         {loading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={{color: '#fff'}}>ĐĂNG NHẬP</Text>
+          <Text style={{color: '#fff', fontWeight: 'bold'}}>ĐĂNG NHẬP</Text>
         )}
       </TouchableOpacity>
     </View>
@@ -108,12 +109,12 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: '80%',
+    width: width-64,
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#FF1493',
+    backgroundColor: '#3B5BB2',
   },
 });

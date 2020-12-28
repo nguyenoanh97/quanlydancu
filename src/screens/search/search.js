@@ -16,11 +16,13 @@ import {
   Body,
   Right,
   Spinner,
+  FooterTab,
+  Footer,
 } from 'native-base';
 import {searchByPeopleCode} from '../../core/services/api';
 import {toast} from '../../core/utils/funtions';
 import {avatarDefault} from '../../../assets/images';
-import { ADD_RESIDENT } from "../../core/utils/screen_names";
+import {ADD_RESIDENT} from '../../core/utils/screen_names';
 
 export default function Search({navigation}) {
   const [text, setText] = useState('');
@@ -30,18 +32,19 @@ export default function Search({navigation}) {
   const onChangeText = (value) => setText(value);
 
   const onBlur = () => {
-    setLoadingSearch(true);
-    searchByPeopleCode('peopleCode', text)
-      .then((value) => {
-        setLoadingSearch(false);
-        setDataSearch(value);
-        console.log('value', value);
-      })
-      .catch((e) => {
-        toast(`Xảy ra lỗi: ${e}`, 'danger');
-        console.error(e);
-      });
-    console.log('here');
+    if (text !== '') {
+      setLoadingSearch(true);
+      searchByPeopleCode('peopleCode', text)
+        .then((value) => {
+          setLoadingSearch(false);
+          setDataSearch(value);
+          console.log('value', value);
+        })
+        .catch((e) => {
+          toast(`Xảy ra lỗi: ${e}`, 'danger');
+          console.error(e);
+        });
+    }
   };
 
   const renderItemData = (item, index) => {
@@ -69,6 +72,10 @@ export default function Search({navigation}) {
     );
   };
 
+  const onBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <Container>
       <Header searchBar rounded>
@@ -91,9 +98,26 @@ export default function Search({navigation}) {
           {!isLoadingSearch && dataSearch.length > 0 && (
             <List>{dataSearch.map(renderItemData)}</List>
           )}
+          {!isLoadingSearch && dataSearch.length === 0 && (
+            <Text style={{textAlign: 'center', marginTop: 20}}>
+              Không có dữ liệu
+            </Text>
+          )}
           {isLoadingSearch && <Spinner color="blue" />}
         </Fragment>
       </Content>
+      <Footer>
+        <FooterTab>
+          <Button light onPress={onBack}>
+            <Text style={{fontWeight: 'bold', fontSize: 12}}>{'Quay lại'}</Text>
+          </Button>
+          <Button primary>
+            <Text style={{fontWeight: 'bold', fontSize: 12}}>
+              Lọc theo phường, xã
+            </Text>
+          </Button>
+        </FooterTab>
+      </Footer>
     </Container>
   );
 }

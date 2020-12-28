@@ -275,10 +275,11 @@ export default function AddResident({navigation, route}) {
               {'< Trang trước'}
             </Text>
           </Button>
-          <Button primary onPress={onNext}>
-            <Text
-              style={{fontWeight: 'bold', fontSize: 12}}
-              disabled={activeIndex === numPage - 1 && !editable}>
+          <Button
+            primary
+            onPress={onNext}
+            disabled={activeIndex === numPage - 1 && !editable}>
+            <Text style={{fontWeight: 'bold', fontSize: 12}}>
               {activeIndex === numPage - 1 && editable
                 ? 'Thêm cư dân'
                 : 'Trang sau >'}
