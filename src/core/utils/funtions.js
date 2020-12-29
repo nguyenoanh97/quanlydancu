@@ -1,5 +1,7 @@
 import {Toast} from 'native-base';
 import {DeviceEventEmitter} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {USER} from './async_key';
 
 export const toast = (msg, type, dur) => {
   Toast.show({
@@ -25,3 +27,4 @@ export const emitParams = (type, data) => {
   DeviceEventEmitter.emit(TYPE_EVENT_EMITTER, type, data);
 };
 
+export const getUser = async () => await AsyncStorage.getItem(USER);

@@ -1,25 +1,29 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
   Container,
-  Content,
   Button,
-  Text,
   Header,
   Left,
   Icon,
   Body,
   Title,
+  H2,
 } from 'native-base';
 import {ADD_RESIDENT, SEARCH} from '../../core/utils/screen_names';
+import ButtonFeature from '../../components/button-feature';
+import {getUser} from '../../core/utils/funtions';
 
 export default function Home({navigation}) {
-  const onAdd = () => {
-    navigation.navigate(ADD_RESIDENT);
-  };
+  const [name, setName] = useState('');
 
-  const onChange = () => {
-    console.log('here');
+  useEffect(() => {
+    getUser().then((value) => {
+      value && setName(`, ${JSON.parse(value)?.name}!`);
+    });
+  }, []);
+
+  const onAdd = () => {
     navigation.navigate(ADD_RESIDENT);
   };
 
@@ -39,25 +43,34 @@ export default function Home({navigation}) {
           <Title>Trang chủ</Title>
         </Body>
       </Header>
-      <Content>
-        <View style={{height: 30}} />
-
-        <Button block light onPress={onSearch}>
-          <Text>Tìm kiếm</Text>
-        </Button>
-        <View style={{height: 30}} />
-
-        <Button block onPress={onAdd}>
-          <Text>Thêm cư dân</Text>
-        </Button>
-        <View style={{height: 30}} />
-
-        <Button block success onPress={onChange}>
-          <Text>Sửa cư dân</Text>
-        </Button>
-      </Content>
+      <H2
+        style={{
+          marginTop: 32,
+          marginLeft: 16,
+        }}>
+        Xin chào{name}
+      </H2>
+      <View style={styles.viewButton}>
+        <ButtonFeature
+          imgURL="https://pngimage.net/wp-content/uploads/2018/05/add-customer-icon-png-4.png"
+          title="Thêm cư dân"
+          onPress={onAdd}
+        />
+        <ButtonFeature
+          imgURL="https://cdn3.iconfinder.com/data/icons/webstore-soft/512/audience_people_business_group_person_student_man-512.png"
+          title="Tìm kiếm cư dân"
+          onPress={onSearch}
+        />
+      </View>
     </Container>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  viewButton: {
+    marginTop: 32,
+    marginHorizontal: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});

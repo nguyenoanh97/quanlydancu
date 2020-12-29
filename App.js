@@ -6,6 +6,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Root} from 'native-base';
 import {
   ADD_RESIDENT,
+  DETAIL_PROFILE,
   HOME,
   LOGIN,
   PROFILE,
@@ -21,6 +22,7 @@ import Profile from './src/screens/profile/profile';
 import AddResident from './src/screens/add_resident/add_resident';
 import {ModalWrapper} from './src/components/modal/modal';
 import Search from './src/screens/search/search';
+import DetailProfile from './src/screens/detail_profile/detail_profile';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -64,6 +66,7 @@ function App() {
               <Stack.Screen name={LOGIN} component={Login} />
               <Stack.Screen name={ADD_RESIDENT} component={AddResident} />
               <Stack.Screen name={SEARCH} component={Search} />
+              <Stack.Screen name={DETAIL_PROFILE} component={DetailProfile} />
             </Stack.Navigator>
           </NavigationContainer>
           <ModalWrapper />

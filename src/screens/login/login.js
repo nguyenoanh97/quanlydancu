@@ -14,8 +14,8 @@ import {toast} from '../../core/utils/funtions';
 import {getAdmin} from '../../core/services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {USER} from '../../core/utils/async_key';
-import { HOME, STACK_TAB } from "../../core/utils/screen_names";
-import { width } from "../../core/utils/const_value";
+import {STACK_TAB} from '../../core/utils/screen_names';
+import {width} from '../../core/utils/const_value';
 
 export default function Login({navigation}) {
   const [username, setUsername] = useState('Darrick.Wolff');
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: width-64,
+    width: width - 64,
     borderRadius: 25,
     height: 50,
     alignItems: 'center',

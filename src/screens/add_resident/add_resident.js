@@ -250,7 +250,6 @@ export default function AddResident({navigation, route}) {
         <Body>
           <Title>Thêm cư dân</Title>
         </Body>
-        <Right />
       </Header>
       <Content>
         <Carousel
