@@ -13,7 +13,6 @@ export default function InputBase({
   const onChangeText = (text) => {
     let obj = {};
     obj[name] = text;
-    console.log('obj', obj);
     onChangeState(obj);
   };
 
@@ -24,7 +23,7 @@ export default function InputBase({
       <Label>{label}</Label>
       <Input
         onChangeText={onChangeText}
-        value={value}
+        value={value.toString()}
         keyboardType={keyboardType || 'default'}
         editable={!onPress && editable}
       />

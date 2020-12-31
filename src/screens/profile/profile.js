@@ -1,47 +1,73 @@
 import React from 'react';
-import {Container, Header, Icon, Left, Button, Body, Title} from 'native-base';
-import {StyleSheet, View} from 'react-native';
+import {Container} from 'native-base';
+import {Alert, FlatList, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {USER} from '../../core/utils/async_key';
 import {DETAIL_PROFILE, LOGIN} from '../../core/utils/screen_names';
 import {toast} from '../../core/utils/funtions';
 import ButtonFeature from '../../components/button-feature';
+import HeaderNoLeft from '../../components/header-noleft';
+import {logOut, profileFeature} from '../../../assets/images';
+
+const data = [
+  {
+    id: '0',
+    title: 'Xem thông tin',
+    icon: profileFeature,
+  },
+  {
+    id: '1',
+    title: 'Đăng xuất',
+    icon: logOut,
+  },
+];
 
 export default function Profile({navigation}) {
-  const onLogout = async () => {
+  const logOut = async () => {
     toast('Đăng xuất thành công!', 'success');
     await AsyncStorage.removeItem(USER);
     navigation.replace(LOGIN);
   };
 
-  const onViewProfile = () => {
-    navigation.navigate(DETAIL_PROFILE);
+  const renderItem = ({item}) => {
+    const onPressItem = () => {
+      switch (item.id) {
+        case '0':
+          navigation.navigate(DETAIL_PROFILE);
+          break;
+        case '1':
+          Alert.alert('Thông báo!', 'Bạn có muốn đăng xuất?', [
+            {text: 'Đồng ý', onPress: logOut},
+            {
+              text: 'Hủy',
+              onPress: () => null,
+              style: 'cancel',
+            },
+          ]);
+          break;
+        default:
+          return null;
+      }
+    };
+    return (
+      <ButtonFeature
+        icon={item.icon}
+        title={item.title}
+        onPress={onPressItem}
+      />
+    );
   };
 
   return (
     <Container>
-      <Header noLeft>
-        <Left>
-          <Button transparent>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Trang cá nhân</Title>
-        </Body>
-      </Header>
-      <View style={styles.viewButton}>
-        <ButtonFeature
-          imgURL="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_VnUVPYd2yW8dEYfNqqkYEehqC0uJ-dGwjA&usqp=CAU"
-          title="Xem thông tin"
-          onPress={onViewProfile}
-        />
-        <ButtonFeature
-          imgURL="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmILJ36vyWg9lmCEFlaqXOVis0lmWxRCO-Ag&usqp=CAU"
-          title="Đăng xuất"
-          onPress={onLogout}
-        />
-      </View>
+      <HeaderNoLeft title="Trang cá nhân" />
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapperStyle}
+      />
     </Container>
   );
 }
@@ -52,5 +78,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  columnWrapperStyle: {
+    justifyContent: 'space-between',
+    marginHorizontal: 16,
+    marginTop: 32,
   },
 });

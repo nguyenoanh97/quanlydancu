@@ -32,4 +32,7 @@ export const createResident = async (data) =>
   await clientAdmin.post('residential', data);
 
 export const searchByPeopleCode = async (field, string) =>
-  await clientAdmin.get(`/residential?${field}=${string}`);
+  await clientAdmin.get(`residential?${field}=${string}`);
+
+export const createHousehold = async (data) =>
+  await clientAdmin.post('household', data);

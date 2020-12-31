@@ -4,10 +4,6 @@ import {
   Container,
   Content,
   Button,
-  Header,
-  Icon,
-  Item,
-  Input,
   Text,
   List,
   ListItem,
@@ -16,13 +12,13 @@ import {
   Body,
   Right,
   Spinner,
-  FooterTab,
-  Footer,
 } from 'native-base';
 import {searchByPeopleCode} from '../../core/services/api';
 import {toast} from '../../core/utils/funtions';
 import {avatarDefault} from '../../../assets/images';
 import {ADD_RESIDENT} from '../../core/utils/screen_names';
+import HeaderBase from '../../components/header';
+import FooterBase from '../../components/footer';
 
 export default function Search({navigation}) {
   const [text, setText] = useState('');
@@ -58,14 +54,14 @@ export default function Search({navigation}) {
           <Thumbnail square source={avatarDefault} />
         </Left>
         <Body>
-          <Text>Sankhadeep</Text>
-          <Text note numberOfLines={1}>
-            Its time to build a difference . .
+          <Text>{item?.name}</Text>
+          <Text note numberOfLines={2}>
+            {item.nativeLand}
           </Text>
         </Body>
         <Right>
           <Button transparent onPress={onViewInfo}>
-            <Text>View</Text>
+            <Text>Chi tiết</Text>
           </Button>
         </Right>
       </ListItem>
@@ -78,48 +74,26 @@ export default function Search({navigation}) {
 
   return (
     <Container>
-      <Header searchBar rounded>
-        <Item>
-          <Icon name="ios-search" />
-          <Input
-            placeholder="Search"
-            autoFocus={true}
-            onBlur={onBlur}
-            onChangeText={onChangeText}
-          />
-          <Icon name="ios-people" />
-        </Item>
-        <Button transparent>
-          <Text>Search</Text>
-        </Button>
-      </Header>
+      <HeaderBase type="search" onBlur={onBlur} onChangeText={onChangeText} />
       <Content>
         <Fragment>
           {!isLoadingSearch && dataSearch.length > 0 && (
             <List>{dataSearch.map(renderItemData)}</List>
           )}
           {!isLoadingSearch && dataSearch.length === 0 && (
-            <Text style={{textAlign: 'center', marginTop: 20}}>
-              Không có dữ liệu
-            </Text>
+            <Text style={styles.textEmpty}>Không có dữ liệu</Text>
           )}
           {isLoadingSearch && <Spinner color="blue" />}
         </Fragment>
       </Content>
-      <Footer>
-        <FooterTab>
-          <Button light onPress={onBack}>
-            <Text style={{fontWeight: 'bold', fontSize: 12}}>{'Quay lại'}</Text>
-          </Button>
-          <Button primary>
-            <Text style={{fontWeight: 'bold', fontSize: 12}}>
-              Lọc theo phường, xã
-            </Text>
-          </Button>
-        </FooterTab>
-      </Footer>
+      <FooterBase onPressLeft={onBack} onPreesRight={() => {}} />
     </Container>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textEmpty: {
+    textAlign: 'center',
+    marginTop: 20,
+  },
+});

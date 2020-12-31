@@ -1,76 +1,129 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useState, useEffect, Fragment} from 'react';
+import {StyleSheet, FlatList} from 'react-native';
+import {Container, H2} from 'native-base';
 import {
-  Container,
-  Button,
-  Header,
-  Left,
-  Icon,
-  Body,
-  Title,
-  H2,
-} from 'native-base';
-import {ADD_RESIDENT, SEARCH} from '../../core/utils/screen_names';
+  ADD_HOUSEHOLD,
+  ADD_RESIDENT,
+  MANAGEMENT,
+  SEARCH,
+} from '../../core/utils/screen_names';
 import ButtonFeature from '../../components/button-feature';
-import {getUser} from '../../core/utils/funtions';
+import {
+  addHousehold,
+  addPeople,
+  findHousehold,
+  findPeople,
+  managementPeople,
+} from '../../../assets/images';
+import HeaderNoLeft from '../../components/header-noleft';
+
+const dataRankLow = [
+  {
+    id: '0',
+    title: 'Thêm cư dân',
+    icon: addPeople,
+  },
+  {
+    id: '1',
+    title: 'Thêm hộ khẩu',
+    icon: addHousehold,
+  },
+  {
+    id: '2',
+    title: 'Tìm kiếm cư dân',
+    icon: findPeople,
+  },
+  {
+    id: '3',
+    title: 'Tìm kiếm hộ khẩu',
+    icon: findHousehold,
+  },
+];
+
+const dataRankHigh = [
+  {
+    id: '2',
+    title: 'Tìm kiếm cư dân',
+    icon: findPeople,
+  },
+  {
+    id: '3',
+    title: 'Tìm kiếm hộ khẩu',
+    icon: findHousehold,
+  },
+  {
+    id: '4',
+    title: 'Quản lý cán bộ',
+    icon: managementPeople,
+  },
+];
 
 export default function Home({navigation}) {
-  const [name, setName] = useState('');
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    getUser().then((value) => {
-      value && setName(`, ${JSON.parse(value)?.name}!`);
-    });
+    global.user && setUser(global.user);
   }, []);
 
-  const onAdd = () => {
-    navigation.navigate(ADD_RESIDENT);
+  const renderItem = ({item}) => {
+    const onPressItem = () => {
+      switch (item.id) {
+        case '0':
+          navigation.navigate(ADD_RESIDENT);
+          break;
+        case '1':
+          navigation.navigate(ADD_HOUSEHOLD);
+          break;
+        case '2':
+          navigation.navigate(SEARCH);
+          break;
+        case '3':
+          navigation.navigate(SEARCH);
+          break;
+        case '4':
+          navigation.navigate(MANAGEMENT);
+          break;
+        default:
+          return null;
+      }
+    };
+    return (
+      <ButtonFeature
+        icon={item.icon}
+        title={item.title}
+        onPress={onPressItem}
+      />
+    );
   };
 
-  const onSearch = () => {
-    navigation.navigate(SEARCH);
-  };
+  const renderListHeaderComponent = () => (
+    <Fragment>
+      {user && <H2 style={styles.textListHeader}>Xin chào, {user?.name}!</H2>}
+    </Fragment>
+  );
 
   return (
     <Container>
-      <Header noLeft>
-        <Left>
-          <Button transparent>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Trang chủ</Title>
-        </Body>
-      </Header>
-      <H2
-        style={{
-          marginTop: 32,
-          marginLeft: 16,
-        }}>
-        Xin chào{name}
-      </H2>
-      <View style={styles.viewButton}>
-        <ButtonFeature
-          imgURL="https://pngimage.net/wp-content/uploads/2018/05/add-customer-icon-png-4.png"
-          title="Thêm cư dân"
-          onPress={onAdd}
-        />
-        <ButtonFeature
-          imgURL="https://cdn3.iconfinder.com/data/icons/webstore-soft/512/audience_people_business_group_person_student_man-512.png"
-          title="Tìm kiếm cư dân"
-          onPress={onSearch}
-        />
-      </View>
+      <HeaderNoLeft title="Trang chủ" />
+      <FlatList
+        data={user?.rank !== '1' ? dataRankHigh : dataRankLow}
+        ListHeaderComponent={renderListHeaderComponent}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapperStyle}
+      />
     </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  viewButton: {
-    marginTop: 32,
-    marginHorizontal: 16,
-    flexDirection: 'row',
+  columnWrapperStyle: {
     justifyContent: 'space-between',
+    marginHorizontal: 16,
+  },
+  textListHeader: {
+    marginVertical: 32,
+    marginLeft: 16,
   },
 });

@@ -18,8 +18,8 @@ import {STACK_TAB} from '../../core/utils/screen_names';
 import {width} from '../../core/utils/const_value';
 
 export default function Login({navigation}) {
-  const [username, setUsername] = useState('Darrick.Wolff');
-  const [password, setPassword] = useState('FwVAuUdTQsta2jS');
+  const [username, setUsername] = useState('oanh.nt');
+  const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
   let user;
 
@@ -41,6 +41,7 @@ export default function Login({navigation}) {
     } else {
       toast('Đăng nhập thành công!', 'success');
       await AsyncStorage.setItem(USER, JSON.stringify(user));
+      global.user = user;
       navigation.navigate(STACK_TAB);
       console.log('user', user);
     }

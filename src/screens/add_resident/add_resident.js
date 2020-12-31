@@ -251,19 +251,17 @@ export default function AddResident({navigation, route}) {
           <Title>Thêm cư dân</Title>
         </Body>
       </Header>
-      <Content>
-        <Carousel
-          ref={_ref}
-          data={dataPage}
-          enableSnap={false}
-          scrollEnabled={false}
-          renderItem={_renderItem}
-          sliderWidth={width}
-          itemWidth={width}
-          onSnapToItem={onSnapToItem}
-        />
-        {/*{pagination()}*/}
-      </Content>
+      <Carousel
+        ref={_ref}
+        data={dataPage}
+        enableSnap={false}
+        scrollEnabled={false}
+        renderItem={_renderItem}
+        sliderWidth={width}
+        itemWidth={width}
+        onSnapToItem={onSnapToItem}
+      />
+      {/*{pagination()}*/}
       <Footer
         onLayout={(e) =>
           console.log('height Footer', e.nativeEvent.layout.height)

@@ -3,15 +3,10 @@ import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {width} from '../core/utils/const_value';
 import {Text} from 'native-base';
 
-export default function ButtonFeature({imgURL, title, onPress}) {
+export default function ButtonFeature({icon, title, onPress}) {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Image
-        source={{
-          uri: imgURL,
-        }}
-        style={styles.image}
-      />
+      <Image source={icon} style={styles.image} />
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
   );
@@ -32,6 +27,7 @@ const styles = StyleSheet.create({
     width: (width - 32) / 2 - 8,
     alignItems: 'center',
     borderRadius: 8,
+    marginBottom: 16,
   },
   image: {
     width: 50,

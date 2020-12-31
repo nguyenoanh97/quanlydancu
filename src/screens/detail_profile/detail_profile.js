@@ -1,54 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import {
-  Container,
-  Button,
-  Header,
-  Left,
-  Icon,
-  Body,
-  Title,
-  Content,
-  Spinner,
-} from 'native-base';
+import {Container, Content, Spinner} from 'native-base';
 import PageInfo from './components/page_info';
-import {getUser} from '../../core/utils/funtions';
+import HeaderBase from '../../components/header';
 
 export default function DetailProfile({navigation}) {
-  const [state, setState] = useState(null);
-
-  const onChangeState = (objValue) => setState({...state, ...objValue});
+  const [user, setUser] = useState(null);
 
   const onBack = () => navigation.goBack();
 
   useEffect(() => {
-    getUser().then((value) => {
-      value && setState(JSON.parse(value));
-    });
+    global.user && setUser(global.user);
   }, []);
 
   return (
     <Container>
-      <Header
-        onLayout={(e) =>
-          console.log('height header', e.nativeEvent.layout.height)
-        }>
-        <Left>
-          <Button transparent onPress={onBack}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Thông tin cá nhân</Title>
-        </Body>
-      </Header>
+      <HeaderBase onPressLeft={onBack} title="Thông tin cá nhân" />
       <Content style={styles.bottom}>
-        {state ? (
-          <PageInfo
-            state={state}
-            onChangeState={onChangeState}
-            editable={false}
-          />
+        {user ? (
+          <PageInfo state={user} editable={false} />
         ) : (
           <Spinner color="blue" />
         )}

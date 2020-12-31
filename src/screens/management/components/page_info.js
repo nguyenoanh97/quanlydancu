@@ -30,7 +30,7 @@ export default function PageInfo({state, onChangeState, editable}) {
       />
       <InputBase
         name="number"
-        value={number}
+        value={number.toString()}
         label="Số hiệu"
         onChangeState={onChangeState}
         editable={editable}

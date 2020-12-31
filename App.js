@@ -5,10 +5,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Root} from 'native-base';
 import {
+  ADD_HOUSEHOLD,
   ADD_RESIDENT,
   DETAIL_PROFILE,
   HOME,
   LOGIN,
+  MANAGEMENT,
   PROFILE,
   SEARCH,
   STACK_TAB,
@@ -23,6 +25,8 @@ import AddResident from './src/screens/add_resident/add_resident';
 import {ModalWrapper} from './src/components/modal/modal';
 import Search from './src/screens/search/search';
 import DetailProfile from './src/screens/detail_profile/detail_profile';
+import AddHousehold from './src/screens/add_household/add_household';
+import Management from './src/screens/management/management';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -39,6 +43,7 @@ function App() {
         initScreen = STACK_TAB;
       }
       setAuth(true);
+      global.user = JSON.parse(value);
       console.log('value', value);
     });
   }, []);
@@ -67,6 +72,8 @@ function App() {
               <Stack.Screen name={ADD_RESIDENT} component={AddResident} />
               <Stack.Screen name={SEARCH} component={Search} />
               <Stack.Screen name={DETAIL_PROFILE} component={DetailProfile} />
+              <Stack.Screen name={ADD_HOUSEHOLD} component={AddHousehold} />
+              <Stack.Screen name={MANAGEMENT} component={Management} />
             </Stack.Navigator>
           </NavigationContainer>
           <ModalWrapper />
