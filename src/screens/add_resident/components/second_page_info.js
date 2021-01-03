@@ -1,8 +1,7 @@
-import React from 'react';
-import {Form} from 'native-base';
+import React, {Fragment} from 'react';
 import InputBase from '../../../components/input-base';
 
-export default function SecondPageInfo({state, onChangeState}) {
+export default function SecondPageInfo({state, onChangeState, editable}) {
   const {
     education,
     advancedEducation,
@@ -17,76 +16,89 @@ export default function SecondPageInfo({state, onChangeState}) {
     imageId,
   } = state;
 
-  return (
-    <Form>
+  const dataPageSecond = [
+    {
+      name: 'education',
+      value: education,
+      label: 'Học vấn (12/12)*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'advancedEducation',
+      value: advancedEducation,
+      label: 'Học vấn nâng cao khác',
+    },
+    {
+      name: 'specialize',
+      value: specialize,
+      label: 'Chuyên môn*',
+    },
+    {
+      name: 'language',
+      value: language,
+      label: 'Ngoại ngữ',
+    },
+    {
+      name: 'job',
+      value: job,
+      label: 'Nghề nghiệp*',
+    },
+    {
+      name: 'resident',
+      value: resident,
+      label: 'Thường trú*',
+    },
+    {
+      name: 'accommodation',
+      value: accommodation,
+      label: 'Nơi ở*',
+    },
+    {
+      name: 'cityId',
+      value: cityId,
+      label: 'Thành phố*',
+    },
+    {
+      name: 'districtId',
+      value: districtId,
+      label: 'Quận huyện*',
+    },
+    {
+      name: 'wardId',
+      value: wardId,
+      label: 'Xã phường*',
+    },
+    {
+      name: 'imageId',
+      value: imageId,
+      label: 'Mã ảnh thẻ*',
+      keyboardType: 'numeric',
+    },
+  ];
+
+  const renderItem = (item, index) => {
+    const {name, label, value, keyboardType} = item;
+    const onPressItem = () => {
+      switch (name) {
+        default:
+          return null;
+      }
+    };
+
+    return (
       <InputBase
-        name="education"
-        value={education}
-        label="Học vấn (12/12)*"
+        key={index.toString()}
+        name={name}
+        value={value}
+        label={label}
         onChangeState={onChangeState}
-        keyboardType="numeric"
+        keyboardType={keyboardType}
+        editable={editable}
+        onPress={name === '' ? onPressItem : null}
+        isLastPage={index === dataPageSecond.length - 1}
       />
-      <InputBase
-        name="advancedEducation"
-        value={advancedEducation}
-        label="Học vấn nâng cao khác"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="specialize"
-        value={specialize}
-        label="Chuyên môn*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="language"
-        value={language}
-        label="Ngoại ngữ"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="job"
-        value={job}
-        label="Nghề nghiệp*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="resident"
-        value={resident}
-        label="Thường trú*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="accommodation"
-        value={accommodation}
-        label="Nơi ở*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="cityId"
-        value={cityId}
-        label="Thành phố*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="districtId"
-        value={districtId}
-        label="Quận huyện*"
-        onChangeState={onChangeState}
-        keyboardType="numeric"
-      />
-      <InputBase
-        name="wardId"
-        value={wardId}
-        label="Xã phường*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="imageId"
-        value={imageId}
-        label="Mã ảnh thẻ*"
-        onChangeState={onChangeState}
-      />
-    </Form>
-  );
+    );
+  };
+
+  return <Fragment>{dataPageSecond.map(renderItem)}</Fragment>;
 }

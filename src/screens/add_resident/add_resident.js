@@ -1,28 +1,25 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Alert, BackHandler, StyleSheet, View, ScrollView} from 'react-native';
+import {Alert, BackHandler, StyleSheet, ScrollView} from 'react-native';
 import {
   Container,
   Button,
-  Header,
-  Left,
-  Icon,
-  Body,
-  Title,
-  Right,
-  Content,
   Footer,
   FooterTab,
   Text,
+  Form,
+  Content,
+  Spinner,
 } from 'native-base';
 import FirstPageInfo from './components/first_page_info';
 import SecondPageInfo from './components/second_page_info';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
 import {width} from '../../core/utils/const_value';
 import ThirdPageInfo from './components/third_page_info';
 import FourthPageInfo from './components/fourth_page_info';
 import {createResident} from '../../core/services/api';
 import {emitParams, toast} from '../../core/utils/funtions';
 import {actionEmitter} from '../../core/utils/emiter';
+import HeaderBase from '../../components/header';
 
 const dataPage = [
   {
@@ -43,7 +40,7 @@ const initState = {
   // page 1
   peopleCode: '', // ma nguoi dan
   name: '', // ten
-  date: '', //ngay sinh
+  date: new Date(), //ngay sinh
   gender: 'Nam', // gioi tinh
   regionBirth: '', // Nơi sinh
   nativeLand: '', // que quan
@@ -96,6 +93,7 @@ const numPage = 4;
 export default function AddResident({navigation, route}) {
   const [state, setState] = useState(initState);
   const [editable, setEditable] = useState(true);
+  const [showList, setShow] = useState(false);
 
   useEffect(() => {
     if (route?.params?.data) {
@@ -103,6 +101,9 @@ export default function AddResident({navigation, route}) {
       setState(data);
       setEditable(false);
     }
+    setTimeout(() => {
+      setShow(true);
+    }, 200);
   }, [route.params]);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -176,107 +177,83 @@ export default function AddResident({navigation, route}) {
     }
   };
 
-  const renderSwitch = (item) => {
-    switch (item.id) {
-      case '0':
-        return (
-          <FirstPageInfo
-            onChangeState={onChangeState}
-            state={state}
-            editable={editable}
-          />
-        );
-      case '1':
-        return (
-          <SecondPageInfo
-            onChangeState={onChangeState}
-            state={state}
-            editable={editable}
-          />
-        );
-      case '2':
-        return (
-          <ThirdPageInfo
-            onChangeState={onChangeState}
-            state={state}
-            editable={editable}
-          />
-        );
-      case '3':
-        return (
-          <FourthPageInfo
-            onChangeState={onChangeState}
-            state={state}
-            editable={editable}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
-  const _renderItem = ({item}) => (
-    <ScrollView style={{height: 500}}>{renderSwitch(item)}</ScrollView>
-  );
-
-  const onSnapToItem = (index) => setActiveIndex(index);
-
-  const pagination = () => {
+  const _renderItem = ({item}) => {
+    const renderSwitch = () => {
+      switch (item.id) {
+        case '0':
+          return (
+            <FirstPageInfo
+              onChangeState={onChangeState}
+              state={state}
+              editable={editable}
+            />
+          );
+        case '1':
+          return (
+            <SecondPageInfo
+              onChangeState={onChangeState}
+              state={state}
+              editable={editable}
+            />
+          );
+        case '2':
+          return (
+            <ThirdPageInfo
+              onChangeState={onChangeState}
+              state={state}
+              editable={editable}
+            />
+          );
+        case '3':
+          return (
+            <FourthPageInfo
+              onChangeState={onChangeState}
+              state={state}
+              editable={editable}
+            />
+          );
+        default:
+          return null;
+      }
+    };
     return (
-      <View style={{}}>
-        <Pagination
-          dotsLength={dataPage.length}
-          activeDotIndex={activeIndex}
-          dotStyle={styles.dotStylePagination}
-          inactiveDotStyle={styles.inactiveDot}
-          inactiveDotOpacity={1}
-          inactiveDotScale={1}
-        />
-      </View>
+      <ScrollView>
+        <Form>{renderSwitch(item)}</Form>
+      </ScrollView>
     );
   };
 
+  const onSnapToItem = (index) => setActiveIndex(index);
+
   return (
     <Container>
-      <Header
-        onLayout={(e) =>
-          console.log('height header', e.nativeEvent.layout.height)
-        }>
-        <Left>
-          <Button transparent onPress={alertUser}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Thêm cư dân</Title>
-        </Body>
-      </Header>
-      <Carousel
-        ref={_ref}
-        data={dataPage}
-        enableSnap={false}
-        scrollEnabled={false}
-        renderItem={_renderItem}
-        sliderWidth={width}
-        itemWidth={width}
-        onSnapToItem={onSnapToItem}
-      />
-      {/*{pagination()}*/}
-      <Footer
-        onLayout={(e) =>
-          console.log('height Footer', e.nativeEvent.layout.height)
-        }>
+      <HeaderBase onPressLeft={alertUser} title="Thêm cư dân" />
+      {showList ? (
+        <Carousel
+          ref={_ref}
+          data={dataPage}
+          enableSnap={false}
+          scrollEnabled={false}
+          renderItem={_renderItem}
+          sliderWidth={width}
+          itemWidth={width}
+          onSnapToItem={onSnapToItem}
+        />
+      ) : (
+        <Content>
+          <Spinner color="blue" />
+        </Content>
+      )}
+      <Footer>
         <FooterTab>
           <Button light onPress={onPrev} disabled={activeIndex === 0}>
-            <Text style={{fontWeight: 'bold', fontSize: 12}}>
-              {'< Trang trước'}
-            </Text>
+            <Text style={styles.textAction}>{'< Trang trước'}</Text>
           </Button>
           <Button
             primary
             onPress={onNext}
             disabled={activeIndex === numPage - 1 && !editable}>
-            <Text style={{fontWeight: 'bold', fontSize: 12}}>
+            <Text style={styles.textAction}>
               {activeIndex === numPage - 1 && editable
                 ? 'Thêm cư dân'
                 : 'Trang sau >'}
@@ -289,39 +266,8 @@ export default function AddResident({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
-  bottomView: {
-    height: 32,
-  },
-  wrapper: {},
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
+  textAction: {
     fontWeight: 'bold',
-  },
-  dotStylePagination: {
-    width: 20,
-    height: 8,
-    borderRadius: 6,
-    backgroundColor: '#FFB76B',
-    alignSelf: 'center',
-    marginHorizontal: -5,
-  },
-  inactiveDot: {
-    width: 8,
-    height: 8,
-    backgroundColor: '#E0E0E0',
-    alignSelf: 'center',
+    fontSize: 12,
   },
 });

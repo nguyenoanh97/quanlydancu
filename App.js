@@ -27,7 +27,8 @@ import Search from './src/screens/search/search';
 import DetailProfile from './src/screens/detail_profile/detail_profile';
 import AddHousehold from './src/screens/add_household/add_household';
 import Management from './src/screens/management/management';
-
+import moment from 'moment';
+import 'moment/locale/vi';
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
@@ -38,6 +39,7 @@ function App() {
   const getUser = async () => await AsyncStorage.getItem(USER);
 
   useEffect(() => {
+    moment().locale('vi');
     getUser().then((value) => {
       if (value !== null) {
         initScreen = STACK_TAB;

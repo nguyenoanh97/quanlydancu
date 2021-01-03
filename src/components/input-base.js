@@ -9,6 +9,7 @@ export default function InputBase({
   onPress,
   keyboardType,
   editable,
+  isLastPage,
 }) {
   const onChangeText = (text) => {
     let obj = {};
@@ -19,7 +20,12 @@ export default function InputBase({
   const onPressItem = () => onPress && onPress();
 
   return (
-    <Item floatingLabel onPress={onPressItem}>
+    <Item
+      floatingLabel
+      onPress={onPressItem}
+      style={{
+        marginBottom: isLastPage ? 24 : 0,
+      }}>
       <Label>{label}</Label>
       <Input
         onChangeText={onChangeText}

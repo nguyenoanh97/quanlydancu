@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import {StyleSheet, FlatList} from 'react-native';
+import {StyleSheet, FlatList, UIManager, LayoutAnimation} from 'react-native';
 import {Container, H2} from 'native-base';
 import {
   ADD_HOUSEHOLD,
@@ -58,11 +58,17 @@ const dataRankHigh = [
   },
 ];
 
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
 export default function Home({navigation}) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    global.user && setUser(global.user);
+    if (global.user) {
+      LayoutAnimation.easeInEaseOut();
+      setUser(global.user);
+    }
   }, []);
 
   const renderItem = ({item}) => {
@@ -106,7 +112,7 @@ export default function Home({navigation}) {
     <Container>
       <HeaderNoLeft title="Trang chủ" />
       <FlatList
-        data={user?.rank !== '1' ? dataRankHigh : dataRankLow}
+        data={user?.rank === '1' ? dataRankLow : dataRankHigh}
         ListHeaderComponent={renderListHeaderComponent}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}

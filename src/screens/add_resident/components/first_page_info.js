@@ -1,6 +1,8 @@
-import React from 'react';
-import {Form, ActionSheet} from 'native-base';
+import React, {Fragment, useState} from 'react';
+import {ActionSheet} from 'native-base';
 import InputBase from '../../../components/input-base';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 const GENDER = [
   {text: 'Nam', icon: 'american-football', iconColor: '#2c8ef4'},
@@ -25,6 +27,77 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
     passport,
   } = state;
 
+  const dataPageFirst = [
+    {
+      name: 'peopleCode',
+      value: peopleCode,
+      label: 'Mã người dân*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'name',
+      value: name,
+      label: 'Tên cư dân*',
+    },
+    {
+      name: 'date',
+      value: date,
+      label: 'Ngày sinh*',
+    },
+    {
+      name: 'gender',
+      value: gender,
+      label: 'Giới tính*',
+    },
+    {
+      name: 'regionBirth',
+      value: regionBirth,
+      label: 'Nơi sinh*',
+    },
+    {
+      name: 'nativeLand',
+      value: nativeLand,
+      label: 'Quê quán*',
+    },
+    {
+      name: 'nation',
+      value: nation,
+      label: 'Dân tộc*',
+    },
+    {
+      name: 'otherNation',
+      value: otherNation,
+      label: 'Dân tộc khác',
+    },
+    {
+      name: 'religion',
+      value: religion,
+      label: 'Tôn giáo*',
+    },
+    {
+      name: 'otherReligion',
+      value: otherReligion,
+      label: 'Tôn giáo khác',
+    },
+    {
+      name: 'country',
+      value: country,
+      label: 'Quốc tịch*',
+    },
+    {
+      name: 'identityCard',
+      value: identityCard,
+      label: 'Số CMND, thẻ căn cước*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'passport',
+      value: passport,
+      label: 'Hộ chiếu*',
+      keyboardType: 'numeric',
+    },
+  ];
+
   const onChangeGender = () => {
     ActionSheet.show(
       {
@@ -39,102 +112,56 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
     );
   };
 
+  const [show, setShowDate] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    setShowDate(false);
+    onChangeState({date: selectedDate});
+  };
+
+  const renderItem = (item, index) => {
+    const {name, label, value, keyboardType} = item;
+    const onPressItem = () => {
+      switch (name) {
+        case 'gender':
+          onChangeGender();
+          break;
+        case 'date':
+          setShowDate(true);
+          break;
+        default:
+          return null;
+      }
+    };
+
+    return (
+      <InputBase
+        key={index.toString()}
+        name={name}
+        value={name === 'date' ? moment(value).format('L') : value}
+        label={label}
+        onChangeState={onChangeState}
+        keyboardType={keyboardType}
+        editable={editable}
+        onPress={name === 'date' || name === 'gender' ? onPressItem : null}
+        isLastPage={index === dataPageFirst.length - 1}
+      />
+    );
+  };
+
   return (
-    <Form>
-      <InputBase
-        name="peopleCode"
-        value={peopleCode}
-        label="Mã người dân*"
-        onChangeState={onChangeState}
-        keyboardType="numeric"
-        editable={editable}
-      />
-      <InputBase
-        name="name"
-        value={name}
-        label="Tên cư dân*"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="date"
-        value={date}
-        label="Ngày sinh*"
-        onChangeState={onChangeState}
-        keyboardType="numeric"
-        editable={editable}
-      />
-      <InputBase
-        name="gender"
-        value={gender}
-        label="Giới tính*"
-        onChangeState={onChangeState}
-        onPress={onChangeGender}
-        editable={editable}
-      />
-      <InputBase
-        name="regionBirth"
-        value={regionBirth}
-        label="Nơi sinh*"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="name"
-        value={nativeLand}
-        label="Quê quán*"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="nation"
-        value={nation}
-        label="Dân tộc*"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="otherNation"
-        value={otherNation}
-        label="Dân tộc khác"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="religion"
-        value={religion}
-        label="Tôn giáo*"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="otherReligion"
-        value={otherReligion}
-        label="Tôn giáo khác"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="country"
-        value={country}
-        label="Đất nước*"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="identityCard"
-        value={identityCard}
-        label="Số CMND, thẻ căn cước*"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="passport"
-        value={passport}
-        label="Hộ chiếu"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-    </Form>
+    <Fragment>
+      {dataPageFirst.map(renderItem)}
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      )}
+    </Fragment>
   );
 }
