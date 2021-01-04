@@ -56,17 +56,20 @@ export default function SecondPageInfo({state, onChangeState, editable}) {
     {
       name: 'cityId',
       value: cityId,
-      label: 'Thành phố*',
+      label: 'ID Thành phố*',
+      keyboardType: 'numeric',
     },
     {
       name: 'districtId',
       value: districtId,
-      label: 'Quận huyện*',
+      label: 'ID Quận huyện*',
+      keyboardType: 'numeric',
     },
     {
       name: 'wardId',
       value: wardId,
-      label: 'Xã phường*',
+      label: 'ID Xã phường*',
+      keyboardType: 'numeric',
     },
     {
       name: 'imageId',
@@ -80,6 +83,8 @@ export default function SecondPageInfo({state, onChangeState, editable}) {
     const {name, label, value, keyboardType} = item;
     const onPressItem = () => {
       switch (name) {
+        case 'cityId':
+          break;
         default:
           return null;
       }
@@ -87,7 +92,7 @@ export default function SecondPageInfo({state, onChangeState, editable}) {
 
     return (
       <InputBase
-        key={index.toString()}
+        key={name}
         name={name}
         value={value}
         label={label}

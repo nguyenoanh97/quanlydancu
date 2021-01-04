@@ -83,6 +83,7 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
       name: 'country',
       value: country,
       label: 'Quốc tịch*',
+      keyboardType: 'numeric',
     },
     {
       name: 'identityCard',
@@ -105,7 +106,7 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
         title: 'Chọn giới tính',
       },
       (buttonIndex) => {
-        buttonIndex &&
+        buttonIndex !== undefined &&
           GENDER[buttonIndex] &&
           onChangeState({gender: GENDER[buttonIndex].text});
       },
@@ -136,7 +137,7 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
 
     return (
       <InputBase
-        key={index.toString()}
+        key={name}
         name={name}
         value={name === 'date' ? moment(value).format('L') : value}
         label={label}

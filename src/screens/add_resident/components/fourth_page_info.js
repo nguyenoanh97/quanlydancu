@@ -1,12 +1,8 @@
-import React from 'react';
-import {Form} from 'native-base';
+import React, {Fragment} from 'react';
 import InputBase from '../../../components/input-base';
 
-export default function FourthPageInfo({state, onChangeState}) {
+export default function FourthPageInfo({state, onChangeState, editable}) {
   const {
-    createdDate,
-    changeDate,
-    personCreated,
     kt,
     fatherId,
     motherId,
@@ -17,76 +13,72 @@ export default function FourthPageInfo({state, onChangeState}) {
     phone,
   } = state;
 
-  return (
-    <Form>
+  const dataPageFourth = [
+    {
+      name: 'kt',
+      value: kt,
+      label: 'Loại KT',
+    },
+    {
+      name: 'fatherId',
+      value: fatherId,
+      label: 'Mã bố*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'motherId',
+      value: motherId,
+      label: 'Mã mẹ*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'coupleId',
+      value: coupleId,
+      label: 'Mã vợ/chồng*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'numSiblings',
+      value: numSiblings,
+      label: 'Số ạnh chị em*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'listSiblings',
+      value: listSiblings,
+      label: 'DS mã anh chị em',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'householdHeadId',
+      value: householdHeadId,
+      label: 'Mã chủ hộ*',
+      keyboardType: 'numeric',
+    },
+    {
+      name: 'phone',
+      value: phone,
+      label: 'Số điện thoại*',
+      keyboardType: 'numeric',
+    },
+  ];
+
+  const renderItem = (item, index) => {
+    const {name, label, value, keyboardType} = item;
+
+    return (
       <InputBase
-        name="createdDate"
-        value={createdDate}
-        label="Ngày tạo*"
+        key={name}
+        name={name}
+        value={value}
+        label={label}
         onChangeState={onChangeState}
-        keyboardType="numeric"
+        keyboardType={keyboardType}
+        editable={editable}
+        isLastPage={index === dataPageFourth.length - 1}
       />
-      <InputBase
-        name="changeDate"
-        value={changeDate}
-        label="Ngày sửa*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="personCreated"
-        value={personCreated}
-        label="Người tạo"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="kt"
-        value={kt}
-        label="Loại KT"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="fatherId"
-        value={fatherId}
-        label="Mã bố*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="motherId"
-        value={motherId}
-        label="Mã mẹ*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="coupleId"
-        value={coupleId}
-        label="Mã vợ/chồng*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="numSiblings"
-        value={numSiblings}
-        label="Số ạnh chị em*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="listSiblings"
-        value={listSiblings}
-        label="DS mã anh chị em*"
-        onChangeState={onChangeState}
-        keyboardType="numeric"
-      />
-      <InputBase
-        name="householdHeadId"
-        value={householdHeadId}
-        label="Mã chủ hộ*"
-        onChangeState={onChangeState}
-      />
-      <InputBase
-        name="phone"
-        value={phone}
-        label="Số điện thoại*"
-        onChangeState={onChangeState}
-      />
-    </Form>
-  );
+    );
+  };
+
+  return <Fragment>{dataPageFourth.map(renderItem)}</Fragment>;
 }

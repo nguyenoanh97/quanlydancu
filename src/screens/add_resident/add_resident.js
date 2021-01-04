@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Alert, BackHandler, StyleSheet, ScrollView} from 'react-native';
+import {
+  Alert,
+  BackHandler,
+  StyleSheet,
+  ScrollView,
+  UIManager,
+  LayoutAnimation,
+} from 'react-native';
 import {
   Container,
   Button,
@@ -20,6 +27,9 @@ import {createResident} from '../../core/services/api';
 import {emitParams, toast} from '../../core/utils/funtions';
 import {actionEmitter} from '../../core/utils/emiter';
 import HeaderBase from '../../components/header';
+
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const dataPage = [
   {
@@ -69,14 +79,14 @@ const initState = {
   host: '', // chu tro
   hostHeadRelationship: '', // quan he vs chu tro
   criminalRecord: '', // tien an
-  die: '', // da chet
-  go: '', // da di
-  comeDate: '', //ngay den
+  die: '0', // da chet
+  go: '0', // da di
+  comeDate: new Date(), //ngay den
   goDate: '', // ngay di
   note: '', // ghi chu
   // page 4
-  createdDate: '', // ngay tao
-  changeDate: '', // ngay sua
+  createdDate: new Date(), // ngay tao
+  changeDate: new Date(), // ngay sua
   personCreated: '', // nguoi tao
   kt: '', // loai kt
   fatherId: '', // ma bo
@@ -102,6 +112,7 @@ export default function AddResident({navigation, route}) {
       setEditable(false);
     }
     setTimeout(() => {
+      LayoutAnimation.linear();
       setShow(true);
     }, 200);
   }, [route.params]);
@@ -227,7 +238,10 @@ export default function AddResident({navigation, route}) {
 
   return (
     <Container>
-      <HeaderBase onPressLeft={alertUser} title="Thêm cư dân" />
+      <HeaderBase
+        onPressLeft={alertUser}
+        title={editable ? 'Thêm cư dân' : 'Thông tin cư dân'}
+      />
       {showList ? (
         <Carousel
           ref={_ref}
@@ -253,7 +267,7 @@ export default function AddResident({navigation, route}) {
             primary
             onPress={onNext}
             disabled={activeIndex === numPage - 1 && !editable}>
-            <Text style={styles.textAction}>
+            <Text style={[styles.textAction, {color: '#fff'}]}>
               {activeIndex === numPage - 1 && editable
                 ? 'Thêm cư dân'
                 : 'Trang sau >'}
