@@ -13,7 +13,7 @@ import {
   Right,
   Spinner,
 } from 'native-base';
-import {searchByPeopleCode} from '../../core/services/api';
+import {getImage, searchByPeopleCode} from '../../core/services/api';
 import {toast} from '../../core/utils/funtions';
 import {avatarDefault} from '../../../assets/images';
 import {ADD_RESIDENT} from '../../core/utils/screen_names';
@@ -32,11 +32,30 @@ export default function Search({navigation}) {
       setLoadingSearch(true);
       searchByPeopleCode('peopleCode', text)
         .then((value) => {
-          setLoadingSearch(false);
-          setDataSearch(value);
-          console.log('value', value);
+          getImage()
+            .then((valueImage) => {
+              const dataWithImage = value.map((item) => {
+                const img = valueImage.find(
+                  (_item) => item.imageId === _item.id,
+                );
+                if (img) {
+                  return {...item, ...img};
+                } else {
+                  return item;
+                }
+              });
+              setDataSearch(dataWithImage);
+            })
+            .catch((e) => {
+              toast(`Xảy ra lỗi: ${e}`, 'danger');
+              console.error(e);
+            })
+            .finally(() => {
+              setLoadingSearch(false);
+            });
         })
         .catch((e) => {
+          setLoadingSearch(false);
           toast(`Xảy ra lỗi: ${e}`, 'danger');
           console.error(e);
         });
@@ -51,7 +70,10 @@ export default function Search({navigation}) {
     return (
       <ListItem thumbnail key={index.toString()}>
         <Left>
-          <Thumbnail square source={avatarDefault} />
+          <Thumbnail
+            square
+            source={item.urlImage ? {uri: item.urlImage} : avatarDefault}
+          />
         </Left>
         <Body>
           <Text>{item?.name}</Text>

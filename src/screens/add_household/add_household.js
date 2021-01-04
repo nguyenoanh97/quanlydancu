@@ -63,7 +63,7 @@ export default function AddHousehold({navigation}) {
       </Content>
       <FooterBase
         onPressCenter={onPressButton}
-        title={'Thêm cư dân'}
+        title={'Thêm hộ khẩu'}
         disabled={false}
         type="oneButton"
       />
