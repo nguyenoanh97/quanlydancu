@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {BASE_URL_ADMIN} from '../../configs/baseUrl';
-import {toast} from '../utils/funtions';
 
 const clientAdmin = axios.create();
 
@@ -38,9 +37,6 @@ export const searchByPeopleCode = async (field, string) =>
 export const createHousehold = async (data) =>
   await clientAdmin.post('household', data);
 
-export const searchImageById = async (field, string) =>
-  await clientAdmin.get(`image?${field}=${string}`);
-
 export const getImage = async () => await clientAdmin.get('image');
 
 export const editResident = async (data) =>
@@ -48,3 +44,12 @@ export const editResident = async (data) =>
 
 export const searchByHousehold = async (field, string) =>
   await clientAdmin.get(`household?${field}=${string}`);
+
+export const getAdminByRank = async (field, string) =>
+  await clientAdmin.get(`admin?${field}=${string}`);
+
+export const updateAdmin = async (data) =>
+  await clientAdmin.put(`admin/${data.id}`, data);
+
+export const getAdminById = async (field, string) =>
+  await clientAdmin.get(`admin?${field}=${string}`);

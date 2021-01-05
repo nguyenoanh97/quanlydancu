@@ -1,23 +1,19 @@
 import React from 'react';
-import {Form} from 'native-base';
+import {Form, Thumbnail} from 'native-base';
 import InputBase from '../../../components/input-base';
+import {StyleSheet} from 'react-native';
+import moment from 'moment';
 
 export default function PageInfo({state, onChangeState, editable}) {
   const {name, avatar, workUnit, number, dateOfBirth, rank} = state;
 
   return (
     <Form>
+      <Thumbnail large source={{uri: avatar}} style={styles.avatar} />
       <InputBase
         name="name"
         value={name}
         label="Tên người dùng"
-        onChangeState={onChangeState}
-        editable={editable}
-      />
-      <InputBase
-        name="avatar"
-        value={avatar}
-        label="Ảnh"
         onChangeState={onChangeState}
         editable={editable}
       />
@@ -37,7 +33,7 @@ export default function PageInfo({state, onChangeState, editable}) {
       />
       <InputBase
         name="dateOfBirth"
-        value={dateOfBirth}
+        value={moment(dateOfBirth).format('L')}
         label="Ngày sinh"
         onChangeState={onChangeState}
         editable={editable}
@@ -52,3 +48,10 @@ export default function PageInfo({state, onChangeState, editable}) {
     </Form>
   );
 }
+
+const styles = StyleSheet.create({
+  avatar: {
+    alignSelf: 'center',
+    marginVertical: 32,
+  },
+});

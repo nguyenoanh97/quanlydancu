@@ -4,23 +4,22 @@ import {Body, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
 import {avatarDefault} from '../../assets/images';
 
 export default function ItemSearch({
-  thumbnail,
-  name,
-  description,
-  actionView,
   titleView = 'Chi tiết',
-  titleOther,
+  item,
   actionOther,
+  titleOther,
+  actionView,
 }) {
+  const {avatar, name, workUnit} = item;
   return (
     <ListItem thumbnail>
       <Left>
-        <Thumbnail square source={avatarDefault} />
+        <Thumbnail square source={avatar ? {uri: avatar} : avatarDefault} />
       </Left>
       <Body>
         <Text>{name}</Text>
         <Text note numberOfLines={2}>
-          {description}
+          {workUnit}
         </Text>
       </Body>
       <Right style={styles.right}>

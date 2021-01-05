@@ -4,13 +4,18 @@ import {Container, Content, Spinner} from 'native-base';
 import PageInfo from './components/page_info';
 import HeaderBase from '../../components/header';
 
-export default function DetailProfile({navigation}) {
+export default function DetailProfile({navigation, route}) {
   const [user, setUser] = useState(null);
 
   const onBack = () => navigation.goBack();
 
   useEffect(() => {
-    global.user && setUser(global.user);
+    if (route?.params?.data) {
+      const {data} = route?.params;
+      setUser(data);
+    } else {
+      global.user && setUser(global.user);
+    }
   }, []);
 
   return (

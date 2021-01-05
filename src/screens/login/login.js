@@ -31,19 +31,22 @@ export default function Login({navigation}) {
     user = null;
     if (
       data.filter((item) => {
-        if (item.username === username && item.password === password) {
+        if (
+          item.username === username &&
+          item.password === password &&
+          item.active
+        ) {
           user = item;
           return item;
         }
       }).length === 0
     ) {
-      toast('Sai tên đăng nhập hoặc mật khẩu!', 'danger');
+      toast('Tài khoản không đúng hoặc đã bị chặn!', 'danger');
     } else {
       toast('Đăng nhập thành công!', 'success');
       await AsyncStorage.setItem(USER, JSON.stringify(user));
       global.user = user;
-      navigation.navigate(STACK_TAB);
-      console.log('user', user);
+      navigation.replace(STACK_TAB);
     }
   };
 
@@ -53,7 +56,6 @@ export default function Login({navigation}) {
       setLoading(true);
       getAdmin()
         .then((value) => {
-          console.log('value', value);
           setLoading(false);
           handleLogin(value);
         })

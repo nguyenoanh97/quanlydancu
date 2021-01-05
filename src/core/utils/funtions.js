@@ -1,7 +1,6 @@
 import {Toast} from 'native-base';
 import {DeviceEventEmitter} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {USER} from './async_key';
+import {actionEmitter} from './emiter';
 
 export const toast = (msg, type, dur) => {
   Toast.show({
@@ -27,4 +26,8 @@ export const emitParams = (type, data) => {
   DeviceEventEmitter.emit(TYPE_EVENT_EMITTER, type, data);
 };
 
-export const getUser = async () => await AsyncStorage.getItem(USER);
+export const handleError = (e) => {
+  emitParams(actionEmitter.TOGGLE_MODAL_LOADING, {visible: false});
+  toast(`Xảy ra lỗi: ${e}`, 'danger');
+  console.error(e);
+};

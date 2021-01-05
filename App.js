@@ -30,6 +30,7 @@ import Management from './src/screens/management/management';
 import moment from 'moment';
 import 'moment/locale/vi';
 import SplashScreen from 'react-native-splash-screen';
+import {getAdminById} from './src/core/services/api';
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
@@ -39,22 +40,34 @@ function App() {
   const [auth, setAuth] = useState(false);
   const getUser = async () => await AsyncStorage.getItem(USER);
 
+  const checkAdmin = (id) => {
+    getAdminById('id', id)
+      .then((r) => {
+        if (r[0]?.active) {
+          initScreen = STACK_TAB;
+        } else {
+          AsyncStorage.removeItem(USER);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+      .finally(() => {
+        setAuth(true);
+        SplashScreen.hide();
+      });
+  };
+
   useEffect(() => {
     moment().locale('vi');
     getUser().then((value) => {
-      if (value !== null) {
-        initScreen = STACK_TAB;
-      }
-      setAuth(true);
-      SplashScreen.hide();
-      global.user = JSON.parse(value);
-      console.log('value', value);
+      const userObj = JSON.parse(value);
+      checkAdmin(userObj?.id);
+      global.user = userObj;
     });
   }, []);
 
   const screenOptions = {headerShown: false};
-
-  console.log('auth', auth, initScreen);
 
   const StackTab = () => (
     <Tabs.Navigator tabBar={(props) => <TabBar {...props} />}>
