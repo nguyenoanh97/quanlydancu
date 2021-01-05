@@ -20,6 +20,8 @@ export default function HeaderBase({
   onChangeText,
   rightTitle,
   onPressRight,
+  placeholder,
+  nameIcon,
 }) {
   return (
     <Fragment>
@@ -28,13 +30,13 @@ export default function HeaderBase({
           <Item>
             <Icon name="ios-search" />
             <Input
-              placeholder="Nhập mã cư dân..."
+              placeholder={placeholder}
               autoFocus={true}
               onBlur={onBlur}
               onChangeText={onChangeText}
               keyboardType="numeric"
             />
-            <Icon name="ios-people" />
+            <Icon name={nameIcon} />
           </Item>
           <Button transparent>
             <Text>Search</Text>

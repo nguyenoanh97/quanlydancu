@@ -20,14 +20,10 @@ export default function FooterBase({
         ) : (
           <Fragment>
             <Button light onPress={onPressLeft}>
-              <Text style={{fontWeight: 'bold', fontSize: 12}}>
-                {'Quay lại'}
-              </Text>
+              <Text style={styles.buttonDivide}>{'Quay lại'}</Text>
             </Button>
             <Button primary onPress={onPressRight}>
-              <Text style={{fontWeight: 'bold', fontSize: 12}}>
-                Lọc theo phường, xã
-              </Text>
+              <Text style={styles.buttonDivide}>Lọc theo phường, xã</Text>
             </Button>
           </Fragment>
         )}
@@ -40,6 +36,10 @@ const styles = StyleSheet.create({
   textButton: {
     fontWeight: 'bold',
     fontSize: 14,
+    color: '#fff',
+  },
+  buttonDivide: {
+    fontSize: 12,
     color: '#fff',
   },
 });

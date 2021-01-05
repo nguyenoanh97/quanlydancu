@@ -29,6 +29,7 @@ import AddHousehold from './src/screens/add_household/add_household';
 import Management from './src/screens/management/management';
 import moment from 'moment';
 import 'moment/locale/vi';
+import SplashScreen from 'react-native-splash-screen';
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
@@ -45,6 +46,7 @@ function App() {
         initScreen = STACK_TAB;
       }
       setAuth(true);
+      SplashScreen.hide();
       global.user = JSON.parse(value);
       console.log('value', value);
     });

@@ -81,10 +81,10 @@ export default function Home({navigation}) {
           navigation.navigate(ADD_HOUSEHOLD);
           break;
         case '2':
-          navigation.navigate(SEARCH);
+          navigation.navigate(SEARCH, {type: 'people'});
           break;
         case '3':
-          navigation.navigate(SEARCH);
+          navigation.navigate(SEARCH, {type: 'household'});
           break;
         case '4':
           navigation.navigate(MANAGEMENT);

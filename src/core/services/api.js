@@ -45,3 +45,6 @@ export const getImage = async () => await clientAdmin.get('image');
 
 export const editResident = async (data) =>
   await clientAdmin.put(`residential/${data?.id}`, data);
+
+export const searchByHousehold = async (field, string) =>
+  await clientAdmin.get(`household?${field}=${string}`);

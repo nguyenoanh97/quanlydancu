@@ -11,3 +11,4 @@ export {default as findPeople} from './find_people.png';
 export {default as managementPeople} from './management-people.png';
 export {default as profileFeature} from './profile_feature.png';
 export {default as logOut} from './log_out.png';
+export {default as household} from './household.png';
