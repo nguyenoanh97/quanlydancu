@@ -43,35 +43,5 @@ export const searchImageById = async (field, string) =>
 
 export const getImage = async () => await clientAdmin.get('image');
 
-// const onBlur = () => {
-//   if (text !== '') {
-//     setLoadingSearch(true);
-//     searchByPeopleCode('peopleCode', text)
-//       .then((value) => {
-//         if (value.length > 0) {
-//           searchImageById('imageId', value[0].imageId)
-//             .then((valueImage) => {
-//               if (valueImage.length > 0) {
-//                 setDataSearch({...value[0], ...valueImage[0]});
-//               } else {
-//                 setDataSearch(value[0]);
-//               }
-//             })
-//             .catch((e) => {
-//               toast(`Xảy ra lỗi: ${e}`, 'danger');
-//               console.error(e);
-//             })
-//             .finally(() => {
-//               setLoadingSearch(false);
-//             });
-//         } else {
-//           setLoadingSearch(false);
-//         }
-//       })
-//       .catch((e) => {
-//         toast(`Xảy ra lỗi: ${e}`, 'danger');
-//         setLoadingSearch(false);
-//         console.error(e);
-//       });
-//   }
-// };
+export const editResident = async (data) =>
+  await clientAdmin.put(`residential/${data?.id}`, data);

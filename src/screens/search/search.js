@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, Fragment, useCallback} from 'react';
 import {StyleSheet} from 'react-native';
 import {
   Container,
@@ -19,6 +19,7 @@ import {avatarDefault} from '../../../assets/images';
 import {ADD_RESIDENT} from '../../core/utils/screen_names';
 import HeaderBase from '../../components/header';
 import FooterBase from '../../components/footer';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function Search({navigation}) {
   const [text, setText] = useState('');
@@ -28,6 +29,7 @@ export default function Search({navigation}) {
   const onChangeText = (value) => setText(value);
 
   const onBlur = () => {
+    console.log('text', text);
     if (text !== '') {
       setLoadingSearch(true);
       searchByPeopleCode('peopleCode', text)
@@ -61,6 +63,12 @@ export default function Search({navigation}) {
         });
     }
   };
+
+  // useFocusEffect(
+  //   useCallback(function () {
+  //     onBlur();
+  //   }, []),
+  // );
 
   const renderItemData = (item, index) => {
     const onViewInfo = () => {

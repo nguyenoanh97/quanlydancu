@@ -9,6 +9,7 @@ import {
   Item,
   Input,
   Text,
+  Right,
 } from 'native-base';
 
 export default function HeaderBase({
@@ -17,6 +18,8 @@ export default function HeaderBase({
   type,
   onBlur,
   onChangeText,
+  rightTitle,
+  onPressRight,
 }) {
   return (
     <Fragment>
@@ -47,6 +50,13 @@ export default function HeaderBase({
           <Body>
             <Title>{title}</Title>
           </Body>
+          {rightTitle && (
+            <Right>
+              <Button hasText transparent onPress={onPressRight}>
+                <Icon name="ios-pencil" />
+              </Button>
+            </Right>
+          )}
         </Header>
       )}
     </Fragment>

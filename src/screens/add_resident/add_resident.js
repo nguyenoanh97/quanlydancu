@@ -23,7 +23,7 @@ import Carousel from 'react-native-snap-carousel';
 import {width} from '../../core/utils/const_value';
 import ThirdPageInfo from './components/third_page_info';
 import FourthPageInfo from './components/fourth_page_info';
-import {createResident} from '../../core/services/api';
+import {createResident, editResident} from '../../core/services/api';
 import {emitParams, toast} from '../../core/utils/funtions';
 import {actionEmitter} from '../../core/utils/emiter';
 import HeaderBase from '../../components/header';
@@ -100,6 +100,8 @@ const initState = {
 
 const numPage = 4;
 
+let isPressEdit = false;
+
 export default function AddResident({navigation, route}) {
   const [state, setState] = useState(initState);
   const [editable, setEditable] = useState(true);
@@ -108,6 +110,7 @@ export default function AddResident({navigation, route}) {
   useEffect(() => {
     if (route?.params?.data) {
       const {data} = route?.params;
+      isPressEdit = !!data;
       setState(data);
       setEditable(false);
     }
@@ -136,14 +139,11 @@ export default function AddResident({navigation, route}) {
     ]);
 
   const alertSuccess = () =>
-    Alert.alert('Thông báo!', 'Bạn đã thêm cư dân thành công!', [
-      {text: 'Trở lại', onPress: onBack},
-      {
-        text: 'Thêm cư dân mới',
-        onPress: () => {},
-        style: 'cancel',
-      },
-    ]);
+    Alert.alert(
+      'Thông báo!',
+      `Bạn đã ${isPressEdit ? 'sửa' : 'thêm'} cư dân thành công!`,
+      [{text: 'Trở lại', onPress: onBack, style: 'cancel'}],
+    );
 
   const backAction = () => {
     alertUser();
@@ -167,8 +167,20 @@ export default function AddResident({navigation, route}) {
 
   const onCreateResident = () => {
     createResident(state)
-      .then((value) => {
-        console.log('value', value);
+      .then(() => {
+        onSetLoading(false);
+        alertSuccess();
+      })
+      .catch((e) => {
+        console.error(e);
+        onSetLoading(false);
+        toast(`Xảy ra lỗi: ${e}`, 'danger');
+      });
+  };
+
+  const onEditResident = () => {
+    editResident(state)
+      .then(() => {
         onSetLoading(false);
         alertSuccess();
       })
@@ -182,7 +194,11 @@ export default function AddResident({navigation, route}) {
   const onNext = () => {
     if (activeIndex === numPage - 1 && editable) {
       onSetLoading(true);
-      onCreateResident();
+      if (isPressEdit) {
+        onEditResident();
+      } else {
+        onCreateResident();
+      }
     } else {
       _ref?.current?.snapToNext(true);
     }
@@ -236,11 +252,24 @@ export default function AddResident({navigation, route}) {
 
   const onSnapToItem = (index) => setActiveIndex(index);
 
+  const onPressRight = () => {
+    LayoutAnimation.easeInEaseOut();
+    setEditable(true);
+  };
+
   return (
     <Container>
       <HeaderBase
         onPressLeft={alertUser}
-        title={editable ? 'Thêm cư dân' : 'Thông tin cư dân'}
+        title={
+          editable
+            ? isPressEdit
+              ? 'Sửa cư dân'
+              : 'Thêm cư dân'
+            : 'Thông tin cư dân'
+        }
+        rightTitle={!editable && 'Sửa'}
+        onPressRight={onPressRight}
       />
       {showList ? (
         <Carousel
@@ -266,10 +295,12 @@ export default function AddResident({navigation, route}) {
           <Button
             primary
             onPress={onNext}
-            disabled={activeIndex === numPage - 1 && !editable}>
+            disabled={activeIndex === numPage - 1 && !editable && !isPressEdit}>
             <Text style={[styles.textAction, {color: '#fff'}]}>
               {activeIndex === numPage - 1 && editable
-                ? 'Thêm cư dân'
+                ? isPressEdit
+                  ? 'Sửa cư dân'
+                  : 'Thêm cư dân'
                 : 'Trang sau >'}
             </Text>
           </Button>

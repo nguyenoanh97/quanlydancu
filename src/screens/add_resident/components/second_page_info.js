@@ -99,7 +99,7 @@ export default function SecondPageInfo({state, onChangeState, editable}) {
         onChangeState={onChangeState}
         keyboardType={keyboardType}
         editable={editable}
-        onPress={name === '' ? onPressItem : null}
+        onPress={!editable || name === '' ? onPressItem : null}
         isLastPage={index === dataPageSecond.length - 1}
       />
     );

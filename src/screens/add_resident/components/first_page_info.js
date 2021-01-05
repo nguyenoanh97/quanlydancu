@@ -144,7 +144,11 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
         onChangeState={onChangeState}
         keyboardType={keyboardType}
         editable={editable}
-        onPress={name === 'date' || name === 'gender' ? onPressItem : null}
+        onPress={
+          editable && (name === 'date' || name === 'gender')
+            ? onPressItem
+            : null
+        }
         isLastPage={index === dataPageFirst.length - 1}
       />
     );
@@ -156,7 +160,7 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={date}
+          value={new Date(date)}
           mode="date"
           is24Hour={true}
           display="default"

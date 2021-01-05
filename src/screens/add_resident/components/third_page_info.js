@@ -158,10 +158,11 @@ export default function ThirdPageInfo({state, onChangeState, editable}) {
         keyboardType={keyboardType}
         editable={editable}
         onPress={
-          name === 'die' ||
-          name === 'go' ||
-          name === 'comeDate' ||
-          name === 'goDate'
+          editable &&
+          (name === 'die' ||
+            name === 'go' ||
+            name === 'comeDate' ||
+            name === 'goDate')
             ? onPressItem
             : null
         }
@@ -176,7 +177,7 @@ export default function ThirdPageInfo({state, onChangeState, editable}) {
       {showComeDate && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={comeDate}
+          value={new Date(comeDate)}
           mode="date"
           is24Hour={true}
           display="default"
@@ -186,7 +187,7 @@ export default function ThirdPageInfo({state, onChangeState, editable}) {
       {showGoDate && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={goDate || new Date()}
+          value={new Date(goDate)}
           mode="date"
           is24Hour={true}
           display="default"
