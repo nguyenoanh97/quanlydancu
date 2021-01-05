@@ -108,6 +108,7 @@ export default function AddResident({navigation, route}) {
   const [showList, setShow] = useState(false);
 
   useEffect(() => {
+    isPressEdit = false;
     if (route?.params?.data) {
       const {data} = route?.params;
       isPressEdit = !!data;
