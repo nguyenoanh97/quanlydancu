@@ -14,24 +14,79 @@ import {
   Spinner,
 } from 'native-base';
 import {
+  getCity,
+  getDistrict,
   getImage,
+  getWard,
   searchByHousehold,
   searchByPeopleCode,
 } from '../../core/services/api';
-import {toast} from '../../core/utils/funtions';
+import {emitParams, toast} from '../../core/utils/funtions';
 import {avatarDefault, household} from '../../../assets/images';
-import {ADD_RESIDENT, FILTER} from '../../core/utils/screen_names';
+import {ADD_RESIDENT} from '../../core/utils/screen_names';
 import HeaderBase from '../../components/header';
 import FooterBase from '../../components/footer';
 import {useFocusEffect} from '@react-navigation/native';
-
-export default function Search({navigation, route}) {
+import {Picker} from 'react-native';
+import {width} from '../../core/utils/const_value';
+import {actionEmitter} from '../../core/utils/emiter';
+export default function Filter({navigation, route}) {
   const [text, setText] = useState('');
   const [dataSearch, setDataSearch] = useState([]);
+  const [dataCity, setDataCity] = useState([]);
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [dataWard, setDataWard] = useState([]);
   const [typeSearch, setTypeSearch] = useState('people');
   const [isLoadingSearch, setLoadingSearch] = useState(false);
 
   const onChangeText = (value) => setText(value);
+
+  const onSetLoading = (status) => {
+    emitParams(actionEmitter.TOGGLE_MODAL_LOADING, {visible: status});
+  };
+
+  useEffect(() => {
+    onSetLoading(true);
+    getCity()
+      .then((value) => {
+        setDataCity(value);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
+
+  const [cityId, setCityId] = useState('1');
+  const [districtId, setDistrictId] = useState('1');
+  const [wardId, setWardId] = useState('1');
+
+  useEffect(() => {
+    onSetLoading(true);
+    getDistrict('cityId', cityId)
+      .then((value) => {
+        setDataDistrict(value);
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+      .finally(() => {
+        onSetLoading(false);
+      });
+  }, [cityId]);
+
+  useEffect(() => {
+    onSetLoading(true);
+    getWard('districtId', districtId)
+      .then((value) => {
+        setDataWard(value);
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+      .finally(() => {
+        onSetLoading(false);
+      });
+  }, [districtId]);
 
   useEffect(() => {
     if (route?.params?.type) {
@@ -50,11 +105,19 @@ export default function Search({navigation, route}) {
     if (text !== '') {
       setLoadingSearch(true);
       if (typeSearch === 'people') {
-        searchByPeopleCode('peopleCode', text)
+        searchByPeopleCode('name', text)
           .then((value) => {
+            console.log('value check:', value);
+            const valueChecked = value.filter(
+              (item) =>
+                item.cityId === cityId &&
+                item.wardId === wardId &&
+                item.districtId === districtId &&
+                item,
+            );
             getImage()
               .then((valueImage) => {
-                const dataWithImage = value.map((item) => {
+                const dataWithImage = valueChecked.map((item) => {
                   const img = valueImage.find(
                     (_item) => item.imageId === _item.id,
                   );
@@ -140,10 +203,54 @@ export default function Search({navigation, route}) {
     navigation.goBack();
   };
 
-  const onPressRight = () => {
-    console.log('here');
-    navigation.navigate(FILTER);
+  const renderItemFilterCity = (item) => {
+    return (
+      <Picker.Item label={item.cityName} value={item.cityId} key={item.id} />
+    );
   };
+
+  const renderItemFilterDistrict = (item) => {
+    return (
+      <Picker.Item label={item.districtName} value={item.id} key={item.id} />
+    );
+  };
+
+  const renderItemFilterWard = (item) => {
+    return <Picker.Item label={item.wardName} value={item.id} key={item.id} />;
+  };
+
+  const renderFilter = () => (
+    <View
+      style={{
+        paddingHorizontal: 16,
+      }}>
+      <Picker
+        selectedValue={cityId}
+        style={{height: 50, width: width - 32}}
+        onValueChange={(itemValue) => {
+          onSetLoading(true);
+          setCityId(itemValue);
+        }}>
+        {dataCity.map(renderItemFilterCity)}
+      </Picker>
+      <Picker
+        selectedValue={districtId}
+        style={{height: 50, width: width - 32}}
+        onValueChange={(itemValue) => {
+          setDistrictId(itemValue);
+        }}>
+        {dataDistrict.map(renderItemFilterDistrict)}
+      </Picker>
+      <Picker
+        selectedValue={wardId}
+        style={{height: 50, width: width - 32}}
+        onValueChange={(itemValue) => {
+          setWardId(itemValue);
+        }}>
+        {dataWard.map(renderItemFilterWard)}
+      </Picker>
+    </View>
+  );
 
   return (
     <Container>
@@ -152,10 +259,12 @@ export default function Search({navigation, route}) {
         onBlur={onBlur}
         onChangeText={onChangeText}
         placeholder={
-          isSearchHousehold ? 'Nhập số hộ khẩu...' : 'Nhập mã cư dân...'
+          isSearchHousehold ? 'Nhập số hộ khẩu...' : 'Nhập tên cư dân...'
         }
         nameIcon={isSearchHousehold ? 'ios-home-outline' : 'ios-people'}
+        keyboardType="default"
       />
+      {renderFilter()}
       <Content>
         {!isLoadingSearch && dataSearch.length > 0 && (
           <List>{dataSearch.map(renderItemData)}</List>
@@ -165,7 +274,7 @@ export default function Search({navigation, route}) {
         )}
         {isLoadingSearch && <Spinner color="blue" />}
       </Content>
-      <FooterBase onPressLeft={onBack} onPressRight={onPressRight} />
+      <FooterBase onPressLeft={onBack} onPreesRight={() => {}} />
     </Container>
   );
 }

@@ -7,3 +7,4 @@ export const SEARCH = 'SEARCH';
 export const DETAIL_PROFILE = 'DETAIL_PROFILE';
 export const ADD_HOUSEHOLD = 'ADD_HOUSEHOLD';
 export const MANAGEMENT = 'MANAGEMENT';
+export const FILTER = 'FILTER';

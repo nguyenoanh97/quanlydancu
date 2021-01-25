@@ -7,14 +7,14 @@ import {Root} from 'native-base';
 import {
   ADD_HOUSEHOLD,
   ADD_RESIDENT,
-  DETAIL_PROFILE,
+  DETAIL_PROFILE, FILTER,
   HOME,
   LOGIN,
   MANAGEMENT,
   PROFILE,
   SEARCH,
   STACK_TAB,
-} from './src/core/utils/screen_names';
+} from "./src/core/utils/screen_names";
 import Login from './src/screens/login/login';
 import Home from './src/screens/home/home';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +27,7 @@ import Search from './src/screens/search/search';
 import DetailProfile from './src/screens/detail_profile/detail_profile';
 import AddHousehold from './src/screens/add_household/add_household';
 import Management from './src/screens/management/management';
+import Filter from "./src/screens/filter/search";
 import moment from 'moment';
 import 'moment/locale/vi';
 import SplashScreen from 'react-native-splash-screen';
@@ -91,6 +92,7 @@ function App() {
               <Stack.Screen name={DETAIL_PROFILE} component={DetailProfile} />
               <Stack.Screen name={ADD_HOUSEHOLD} component={AddHousehold} />
               <Stack.Screen name={MANAGEMENT} component={Management} />
+              <Stack.Screen name={FILTER} component={Filter} />
             </Stack.Navigator>
           </NavigationContainer>
           <ModalWrapper />

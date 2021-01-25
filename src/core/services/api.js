@@ -1,7 +1,9 @@
 import axios from 'axios';
-import {BASE_URL_ADMIN} from '../../configs/baseUrl';
+import {BASE_URL_ADMIN, BASE_URL_ADDRESS} from '../../configs/baseUrl';
 
 const clientAdmin = axios.create();
+
+const clientAddress = axios.create();
 
 clientAdmin.interceptors.request.use(
   async (config) => {
@@ -13,6 +15,29 @@ clientAdmin.interceptors.request.use(
 );
 
 clientAdmin.interceptors.response.use(
+  function (response) {
+    try {
+      console.log('response', response?.data);
+      return response?.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  function (error) {
+    throw error;
+  },
+);
+
+clientAddress.interceptors.request.use(
+  async (config) => {
+    config.baseURL = BASE_URL_ADDRESS;
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+clientAddress.interceptors.response.use(
   function (response) {
     try {
       console.log('response', response?.data);
@@ -53,3 +78,11 @@ export const updateAdmin = async (data) =>
 
 export const getAdminById = async (field, string) =>
   await clientAdmin.get(`admin?${field}=${string}`);
+
+export const getCity = async () => await clientAddress.get('city');
+
+export const getDistrict = async (field, string) =>
+  await clientAddress.get(`district?${field}=${string}`);
+
+export const getWard = async (field, string) =>
+  await clientAddress.get(`ward?${field}=${string}`);

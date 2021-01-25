@@ -22,6 +22,7 @@ export default function HeaderBase({
   onPressRight,
   placeholder,
   nameIcon,
+  keyboardType,
 }) {
   return (
     <Fragment>
@@ -34,7 +35,7 @@ export default function HeaderBase({
               autoFocus={true}
               onBlur={onBlur}
               onChangeText={onChangeText}
-              keyboardType="numeric"
+              keyboardType={keyboardType || 'numeric'}
             />
             <Icon name={nameIcon} />
           </Item>
