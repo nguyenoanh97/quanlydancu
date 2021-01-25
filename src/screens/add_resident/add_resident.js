@@ -3,7 +3,6 @@ import {
   Alert,
   BackHandler,
   StyleSheet,
-  ScrollView,
   UIManager,
   LayoutAnimation,
 } from 'react-native';
@@ -15,7 +14,6 @@ import {
   Text,
   Form,
   Content,
-  Spinner,
 } from 'native-base';
 import FirstPageInfo from './components/first_page_info';
 import SecondPageInfo from './components/second_page_info';
@@ -23,7 +21,12 @@ import Carousel from 'react-native-snap-carousel';
 import {width} from '../../core/utils/const_value';
 import ThirdPageInfo from './components/third_page_info';
 import FourthPageInfo from './components/fourth_page_info';
-import {createResident, editResident} from '../../core/services/api';
+import {
+  createAccommodation,
+  createFamily,
+  createResident,
+  editResident,
+} from '../../core/services/api';
 import {emitParams, toast} from '../../core/utils/funtions';
 import {actionEmitter} from '../../core/utils/emiter';
 import HeaderBase from '../../components/header';
@@ -105,7 +108,6 @@ let isPressEdit = false;
 export default function AddResident({navigation, route}) {
   const [state, setState] = useState(initState);
   const [editable, setEditable] = useState(true);
-  const [showList, setShow] = useState(false);
 
   useEffect(() => {
     isPressEdit = false;
@@ -115,10 +117,6 @@ export default function AddResident({navigation, route}) {
       setState(data);
       setEditable(false);
     }
-    setTimeout(() => {
-      LayoutAnimation.linear();
-      setShow(true);
-    }, 200);
   }, [route.params]);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -167,8 +165,22 @@ export default function AddResident({navigation, route}) {
   };
 
   const onCreateResident = () => {
+    const user = global.user;
     createResident(state)
       .then(() => {
+        createFamily({
+          accommodation: state.accommodation,
+          peopleCreated: user.id,
+          peopleUpdate: user.id,
+          note: state.note,
+          householdId: state.householdId,
+        });
+        createAccommodation({
+          peopleCode: state.peopleCode,
+          note: state.note,
+          accommodation: state.accommodation,
+          hostHeadRelationship: state.hostHeadRelationship,
+        });
         onSetLoading(false);
         alertSuccess();
       })
@@ -201,7 +213,11 @@ export default function AddResident({navigation, route}) {
         onCreateResident();
       }
     } else {
-      _ref?.current?.snapToNext(true);
+      if (state.peopleCode !== '') {
+        _ref?.current?.snapToNext(true);
+      } else {
+        toast('Bạn hãy điền các trường thông tin!', 'warning');
+      }
     }
   };
 
@@ -245,9 +261,9 @@ export default function AddResident({navigation, route}) {
       }
     };
     return (
-      <ScrollView>
+      <Content>
         <Form>{renderSwitch(item)}</Form>
-      </ScrollView>
+      </Content>
     );
   };
 
@@ -272,22 +288,16 @@ export default function AddResident({navigation, route}) {
         rightTitle={!editable && 'Sửa'}
         onPressRight={onPressRight}
       />
-      {showList ? (
-        <Carousel
-          ref={_ref}
-          data={dataPage}
-          enableSnap={false}
-          scrollEnabled={false}
-          renderItem={_renderItem}
-          sliderWidth={width}
-          itemWidth={width}
-          onSnapToItem={onSnapToItem}
-        />
-      ) : (
-        <Content>
-          <Spinner color="blue" />
-        </Content>
-      )}
+      <Carousel
+        ref={_ref}
+        data={dataPage}
+        enableSnap={false}
+        scrollEnabled={false}
+        renderItem={_renderItem}
+        sliderWidth={width}
+        itemWidth={width}
+        onSnapToItem={onSnapToItem}
+      />
       <Footer>
         <FooterTab>
           <Button light onPress={onPrev} disabled={activeIndex === 0}>

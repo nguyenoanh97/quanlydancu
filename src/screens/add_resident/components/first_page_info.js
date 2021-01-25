@@ -1,13 +1,14 @@
 import React, {Fragment, useState} from 'react';
-import {ActionSheet} from 'native-base';
 import InputBase from '../../../components/input-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import {View} from 'react-native';
+import PickerBase from '../../../components/picker-base';
 
-const GENDER = [
-  {text: 'Nam', icon: 'american-football', iconColor: '#2c8ef4'},
-  {text: 'Nữ', icon: 'analytics', iconColor: '#f42ced'},
-  {text: 'Khác', icon: 'aperture', iconColor: '#ea943b'},
+const genderArr = [
+  {label: 'Nam', value: 'Nam'},
+  {label: 'Nữ', value: 'Nữ'},
+  {label: 'Khác', value: 'Khác'},
 ];
 
 export default function FirstPageInfo({state, onChangeState, editable}) {
@@ -99,20 +100,6 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
     },
   ];
 
-  const onChangeGender = () => {
-    ActionSheet.show(
-      {
-        options: GENDER,
-        title: 'Chọn giới tính',
-      },
-      (buttonIndex) => {
-        buttonIndex !== undefined &&
-          GENDER[buttonIndex] &&
-          onChangeState({gender: GENDER[buttonIndex].text});
-      },
-    );
-  };
-
   const [show, setShowDate] = useState(false);
 
   const onChange = (event, selectedDate) => {
@@ -124,9 +111,6 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
     const {name, label, value, keyboardType} = item;
     const onPressItem = () => {
       switch (name) {
-        case 'gender':
-          onChangeGender();
-          break;
         case 'date':
           setShowDate(true);
           break;
@@ -136,21 +120,29 @@ export default function FirstPageInfo({state, onChangeState, editable}) {
     };
 
     return (
-      <InputBase
-        key={name}
-        name={name}
-        value={name === 'date' ? moment(value).format('L') : value}
-        label={label}
-        onChangeState={onChangeState}
-        keyboardType={keyboardType}
-        editable={editable}
-        onPress={
-          editable && (name === 'date' || name === 'gender')
-            ? onPressItem
-            : null
-        }
-        isLastPage={index === dataPageFirst.length - 1}
-      />
+      <View key={name}>
+        {name === 'gender' ? (
+          <PickerBase
+            value={value}
+            name={name}
+            onChangeState={onChangeState}
+            editable={editable}
+            label="Giới tính*"
+            data={genderArr}
+          />
+        ) : (
+          <InputBase
+            name={name}
+            value={name === 'date' ? moment(value).format('L') : value}
+            label={label}
+            onChangeState={onChangeState}
+            keyboardType={keyboardType}
+            editable={editable}
+            onPress={editable && name === 'date' ? onPressItem : null}
+            isLastPage={index === dataPageFirst.length - 1}
+          />
+        )}
+      </View>
     );
   };
 

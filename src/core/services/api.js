@@ -1,9 +1,15 @@
 import axios from 'axios';
-import {BASE_URL_ADMIN, BASE_URL_ADDRESS} from '../../configs/baseUrl';
+import {
+  BASE_URL_ADMIN,
+  BASE_URL_ADDRESS,
+  BASE_URL_SYNC,
+} from '../../configs/baseUrl';
 
 const clientAdmin = axios.create();
 
 const clientAddress = axios.create();
+
+const clientSync = axios.create();
 
 clientAdmin.interceptors.request.use(
   async (config) => {
@@ -38,6 +44,29 @@ clientAddress.interceptors.request.use(
 );
 
 clientAddress.interceptors.response.use(
+  function (response) {
+    try {
+      console.log('response', response?.data);
+      return response?.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  function (error) {
+    throw error;
+  },
+);
+
+clientSync.interceptors.request.use(
+  async (config) => {
+    config.baseURL = BASE_URL_SYNC;
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+clientSync.interceptors.response.use(
   function (response) {
     try {
       console.log('response', response?.data);
@@ -86,3 +115,9 @@ export const getDistrict = async (field, string) =>
 
 export const getWard = async (field, string) =>
   await clientAddress.get(`ward?${field}=${string}`);
+
+export const createFamily = async (data) =>
+  await clientSync.post('family', data);
+
+export const createAccommodation = async (data) =>
+  await clientSync.post('accommodation', data);
