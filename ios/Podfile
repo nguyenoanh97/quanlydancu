@@ -8,6 +8,8 @@ target 'QuanlyCuDan' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
+
   target 'QuanlyCuDanTests' do
     inherit! :complete
     # Pods for testing

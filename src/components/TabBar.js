@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {home, homeActived, profile, profileActive} from '../../assets/images';
 
-const primaryColor = 'red';
+const primaryColor = '#FC8A1B';
 
 const TabItem = ({index, icon, active, onPress}) => (
   <View style={styles.menuItem}>
@@ -78,6 +78,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
   },
   menuItem: {
     flex: 1,

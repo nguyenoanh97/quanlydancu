@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
+import {width} from '../../../core/utils/const_value';
 
 export default function InputLogin({
   value,
@@ -23,16 +24,17 @@ export default function InputLogin({
 
 const styles = StyleSheet.create({
   inputView: {
-    backgroundColor: '#FFC0CB',
     borderRadius: 30,
-    width: '70%',
+    width: width - 64,
     height: 45,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   TextInput: {
     height: 50,
     flex: 1,
     padding: 10,
-    marginLeft: 20,
+    marginLeft: 4,
   },
 });

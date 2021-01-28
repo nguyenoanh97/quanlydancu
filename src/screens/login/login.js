@@ -14,11 +14,12 @@ import {toast} from '../../core/utils/funtions';
 import {getAdmin} from '../../core/services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {USER} from '../../core/utils/async_key';
-import {HOME} from '../../core/utils/screen_names';
+import {STACK_TAB} from '../../core/utils/screen_names';
+import {width} from '../../core/utils/const_value';
 
 export default function Login({navigation}) {
-  const [username, setUsername] = useState('Darrick.Wolff');
-  const [password, setPassword] = useState('FwVAuUdTQsta2jS');
+  const [username, setUsername] = useState('oanh.nt');
+  const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
   let user;
 
@@ -30,18 +31,22 @@ export default function Login({navigation}) {
     user = null;
     if (
       data.filter((item) => {
-        if (item.username === username && item.password === password) {
+        if (
+          item.username === username &&
+          item.password === password &&
+          item.active
+        ) {
           user = item;
           return item;
         }
       }).length === 0
     ) {
-      toast('Sai tên đăng nhập hoặc mật khẩu!', 'danger');
+      toast('Tài khoản không đúng hoặc đã bị chặn!', 'danger');
     } else {
       toast('Đăng nhập thành công!', 'success');
       await AsyncStorage.setItem(USER, JSON.stringify(user));
-      navigation.navigate(HOME);
-      console.log('user', user);
+      global.user = user;
+      navigation.replace(STACK_TAB);
     }
   };
 
@@ -51,7 +56,6 @@ export default function Login({navigation}) {
       setLoading(true);
       getAdmin()
         .then((value) => {
-          console.log('value', value);
           setLoading(false);
           handleLogin(value);
         })
@@ -85,7 +89,7 @@ export default function Login({navigation}) {
         {loading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={{color: '#fff'}}>ĐĂNG NHẬP</Text>
+          <Text style={{color: '#fff', fontWeight: 'bold'}}>ĐĂNG NHẬP</Text>
         )}
       </TouchableOpacity>
     </View>
@@ -108,12 +112,12 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: '80%',
+    width: width - 64,
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#FF1493',
+    backgroundColor: '#3B5BB2',
   },
 });
